@@ -1,0 +1,4 @@
+# 乌龟角速度（对应消息里的 angular_z)
+angular_z: 0.3  
+# 运动时长（对应消息里的 move_duration)
+move_duration: 10.0  
