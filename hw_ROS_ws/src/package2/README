@@ -44,3 +44,5 @@ rqt_graph:可视化计算图，用于查看节点之间的通信关系
 ## 四、完成作业遇到的困难及解决办法
 1. **困难**：自定义消息编译报错，找不到头文件。  
    **解决**：检查 `package.xml` 和 `CMakeLists.txt` 中消息相关配置是否正确，重新 `catkin_make` 并确保 `source` 工作空间。  
+
+https://github.com/Eric060504/26-wuren-liufengrui.git
