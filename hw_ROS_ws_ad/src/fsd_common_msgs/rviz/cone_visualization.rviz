@@ -1,0 +1,18 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+    Properties:
+      - Class: rviz/GlobalOptions
+        Name: Global Options
+        Properties:
+          Fixed Frame: map
+      - Class: rviz/Marker
+        Name: Cone Visualization
+        Properties:
+          Topic: /cone_marker
+          Marker Scale: 1.0
+  - Class: rviz/Views
+    Name: Views
+    Properties:
+      - Class: rviz/Orbit
+        Name: Current View

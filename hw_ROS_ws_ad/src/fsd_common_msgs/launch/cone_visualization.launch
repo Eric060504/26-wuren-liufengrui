@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- 运行锥筒计数器 -->
+    <node name="cone_counter" pkg="fsd_common_msgs" type="cone_counter" output="screen"/>
+
+    <!-- 运行 RVIZ 可视化节点 -->
+    <node name="cone_visualizer" pkg="fsd_common_msgs" type="cone_visualizer" output="screen"/>
+
+    <!-- 启动 RVIZ -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fsd_common_msgs)/rviz/cone_visualization.rviz" />
+
+</launch>

@@ -1,0 +1,48 @@
+# ROS 基础作业 README
+
+## 一、代码启动命令流程
+1. 确保已安装 ROS Noetic 环境，创建并初始化工作空间 `hw_ros_ws`
+2. 编译工作空间：在 `~/hw_ros_ws` 执行 `catkin_make` ，然后 `source devel/setup.bash` 。  
+3. 启动核心与作业节点：  
+   - 终端 1:`roscore`  
+   - 终端 2:`roslaunch package2 turtle_control.launch`  
+
+## 二、ROS 学习笔记
+1. 基础概念
+节点(Node):执行具体功能的进程,通过话题和服务通信
+话题(Topic):异步通信机制，采用发布 / 订阅模式
+服务(Service):同步通信机制，采用请求 / 响应模式
+参数服务器：全局存储和访问参数的键值对
+消息(Message):话题上传输的数据结构，支持自定义
+功能包(Package):ROS 软件的基本组织单元
+2. 常用命令
+rosnode list		列出当前活动的节点
+rosnode info		打印出节点的信息
+rosnode kill		杀死节点
+rosnode cleanup	清除不可连接的节点
+rostopic list		列出当前活动的话题
+rostopic info		打印出话题信息（静态），可查看消息类型，话题的发布方和订阅方
+rostopic echo	打印出话题信息（动态），可查看话题中消息的值
+rostopic pub		发布话题
+rosmsg list		列出所有消息
+rosmsg info		打印出消息的信息，可查看消息
+rosmsg show		打印出消息的描述
+rosmsg package	显示某个功能包下的所有消息
+rosparam list		列出所有参数
+rosparam set		设置参数
+rosparam get		获取参数
+rosparam delete	删除参数
+rosparam load		从外部文件加载参数(yaml)
+rqt_graph:可视化计算图，用于查看节点之间的通信关系
+
+
+
+## 三、作业完成思路
+1. 先规划功能，拆分为消息发布、参数配置、消息接收与控制、节点启动四个模块。  
+2. 自定义消息实现速度数据传递，用 yaml 解耦参数便于修改，C++ 节点处理逻辑控制乌龟运动，launch 统一管理启动。  
+
+## 四、完成作业遇到的困难及解决办法
+1. **困难**：自定义消息编译报错，找不到头文件。  
+   **解决**：检查 `package.xml` 和 `CMakeLists.txt` 中消息相关配置是否正确，重新 `catkin_make` 并确保 `source` 工作空间。  
+   
+   https://github.com/Eric060504/26-wuren-liufengrui.git

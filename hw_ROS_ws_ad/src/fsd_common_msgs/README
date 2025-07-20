@@ -1,0 +1,147 @@
+# ROS 进阶任务 README
+
+##  项目目标
+
+1. 统计红蓝锥桶数量
+2. 在 RVIZ 中可视化红蓝锥桶（区分颜色）
+3. 使用 `.bag` 文件中的 `/perception/lidar/cone_side` 话题数据
+
+
+## 使用工具
+
+ROS (Robot Operating System)
+RVIZ（ROS 可视化工具）
+`rosbag`（数据记录与回放）
+C++ 编写 ROS 节点
+自定义消息类型：`fsd_common_msgs/ConeDetections`
+
+
+## 项目结构
+
+hw_ROS_ws/
+├── src/
+│   └── fsd_common_msgs/
+│       ├── msg/
+│       │   ├── Cone.msg
+│       │   ├── ConeDetections.msg
+│       ├── src/
+│       │   ├── cone_counter.cpp
+│       │   ├── cone_visualizer.cpp
+│       ├── CMakeLists.txt
+│       ├── package.xml
+├── launch/
+│   └── cone_processing.launch
+├── rviz/
+│   └── cone_visualization.rviz
+├── bag/
+│   └── your_bag_file.bag
+
+
+##  启动流程
+
+### 1. 编译工作空间
+
+cd /home/eric/hw_ROS_ws
+catkin_make
+source devel/setup.bash
+
+
+### 2. 启动 `roscore`
+roscore
+### 3. 运行 cone_counter 和 cone_visualizer 节点
+rosrun fsd_common_msgs cone_counter
+rosrun fsd_common_msgs cone_visualizer
+或使用 `.launch` 文件一键启动：
+roslaunch fsd_common_msgs cone_processing.launch
+### 4. 播放 `.bag` 文件
+cd /home/eric/hw_ROS_ws/src/fsd_common_msgs/bag
+rosbag play your_bag_file.bag
+### 5. 启动 RVIZ 查看可视化结果
+rviz
+在 RVIZ 中：
+
+设置 Fixed Frame = map
+点击 Add By Topic 选择 /cone_marker visualization_msgs/Marker
+
+## ROS 学习笔记
+
+### 1. ROS 核心概念
+
+话题（Topic）：ROS 节点之间通信的方式，如 `/cone_marker`
+消息（Message）：话题中传输的数据结构，如 `visualization_msgs/Marker`
+节点（Node）：ROS 中的独立运行单元，如 [cone_counter](file:///home/eric/hw_ROS_ws/devel/lib/fsd_common_msgs/cone_counter) 和 [cone_visualizer](file:///home/eric/hw_ROS_ws/devel/lib/fsd_common_msgs/cone_visualizer)
+包（Package）：ROS 中功能的基本单元，包含代码、消息、配置等
+launch 文件：用于一键启动多个节点和配置参数
+
+
+### 2. 消息类型
+
+fsd_common_msgs/ConeDetections`：包含多个 `fsd_common_msgs/Cone` 的数组
+visualization_msgs/Marker`：用于 RVIZ 中的可视化
+std_msgs/String`：用于区分颜色（`"b"` 为蓝色，`"r"` 为红色）
+
+## 作业完成思路
+
+1. 分析 `.bag` 文件内容，确认话题名称和消息类型。
+2. 编写 `cone_counter.cpp`：订阅 `/perception/lidar/cone_side`，统计红蓝锥桶数量。
+3. 编写 `cone_visualizer.cpp`：订阅相同话题，发布 `/cone_marker`，用于 RVIZ 可视化。
+4. 修改 `CMakeLists.txt`：添加新节点，确保正确编译。
+5. 创建 `.launch` 文件：一键启动所有节点。
+6. 配置 RVIZ：正确显示 `/cone_marker`，设置 Fixed Frame 为 `map`。
+7. 验证功能：播放 `.bag` 文件，查看终端输出和 RVIZ 显示。
+
+
+
+## 遇到的问题及解决办法
+
+### 问题 1：RVIZ 显示不出锥桶
+
+原因：RVIZ 没有订阅 `/cone_marker` 话题，或话题未发布。
+
+解决办法：
+手动添加 `/cone_marker` 到 RVIZ
+使用 `rostopic list` 和 `rostopic echo` 检查话题是否发布
+
+
+
+### 问题 2：`rostopic echo /perception/lidar/cone_side` 报错
+
+错误信息：
+ERROR: Cannot load message class for [fsd_common_msgs/ConeDetections]. Are your messages built?
+
+原因：未运行 `catkin_make` 或未 `source` 环境变量
+
+解决办法：bash
+cd /home/eric/hw_ROS_ws
+catkin_make
+source devel/setup.bash
+
+
+
+### 问题 3：RVIZ 显示黑屏或白屏
+
+原因：坐标系设置错误或视角不对
+
+解决办法：
+设置 Fixed Frame 为 `map`
+使用鼠标左键旋转、右键平移、滚轮缩放调整视角
+
+
+
+### 问题 4：`cone_marker` 没有数据输出
+
+原因：
+`cone_visualizer` 节点未运行
+`.bag` 文件中没有 `/perception/lidar/cone_side` 数据
+消息未正确发布或订阅
+
+解决办法：
+确保 `cone_visualizer` 已运行
+使用 `rostopic info /perception/lidar/cone_side` 检查订阅状态
+添加 `ROS_INFO` 日志确认回调函数是否被调用
+
+
+##总结
+本项目通过 ROS 实现了对 `.bag` 文件中锥桶信息的解析、统计和可视化，加深了对 ROS 节点通信、话题订阅、消息类型定义、RVIZ 显示等核心概念的理解。通过不断调试和日志输出，逐步解决了 RVIZ 显示、话题订阅、消息类型构建等问题。
+
+https://github.com/Eric060504/26-wuren-liufengrui.git
